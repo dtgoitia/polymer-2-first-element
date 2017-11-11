@@ -1,0 +1,33 @@
+<link rel="import" href="../../../polymer/polymer-element.html">
+<link rel="import" href="../../../iron-image/iron-image.html">
+
+<dom-module id="car-filter-example">
+  <template>
+    <style>
+      /* shadow DOM styles go here */
+      :host {
+        --primary-color: #408cff;
+        --background-color: #616161;
+        --text-color: rgba(0,0,0,0.8);
+
+        display: inline-block;
+        width: 382px;
+        height: 607px;
+      }
+      iron-image {
+        width: 382px;
+        height: 607px;
+        vertical-align: baseline;
+      }
+    </style>
+    
+    <iron-image src="../../../elements/filters/car-filter-example.png"></iron-image>
+    
+  </template>
+  <script>
+    class CarFilterExample extends Polymer.Element {
+      static get is() { return "car-filter-example"; }
+    }
+    customElements.define(CarFilterExample.is, CarFilterExample);
+  </script>
+</dom-module>

@@ -1,16 +1,38 @@
 <!doctype html>
 <html>
   <head>
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
     <script>
       /*
       window.Polymer = window.Polymer || {};
       window.Polymer.dom = 'shadow';
       */
     </script>
-    <link rel="import" href="demo-element.html">
+    <link rel="import" href="../elements/filters/car-filter.html">
+    <link rel="import" href="../elements/results/car-list.html">
+    <style>
+        :root {
+          background-color: #aaa;
+          --primary-color: #408cff;
+          --background-color: #616161;
+          --text-color: rgba(0,0,0,0.8);
+        }
+        car-filter {
+          font-size: 16px;
+        }
+      </style>
   </head>
   <body>
-    <demo-element></demo-element>
+    <car-filter></car-filter>
+    <car-list data='[
+      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"}
+    ]'
+    ></car-list>
   </body>
 </html>

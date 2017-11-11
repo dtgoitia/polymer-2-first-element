@@ -1,0 +1,50 @@
+<link rel="import" href="../../../polymer/polymer-element.html">
+<link rel="import" href="./car-card.html">
+
+<dom-module id="car-list">
+  <template>
+    <style>
+      :host {
+        --primary-color: #408cff;
+        --background-color: #616161;
+        --text-color: rgba(0,0,0,0.8);
+        --border-radius: 5px;
+
+        display: inline-block;
+        border: 5px var(--primary-color) solid;
+      }
+    </style>
+    <div>
+      <template is="dom-repeat" items="{{data}}">
+        <car-card
+          make={{item.make}}
+          model={{item.model}}
+          price={{item.price}}
+          year={{item.year}}
+          milleage={{item.milleage}}
+          img-url={{item.imgUrl}}
+        >
+        </car-card>
+      </template>
+    </div>
+    
+  </template>
+  <script>
+    class CarList extends Polymer.Element {
+      static get is() { return "car-list"; }
+      static get properties() {
+        return {
+          data: {type: Array},
+        }
+      }
+      constructor() {
+        super();
+      }
+      ready() {
+        super.ready();
+        console.log('CarList.data:', this.data);
+      }
+    }
+    customElements.define(CarList.is, CarList);
+  </script>
+</dom-module>
