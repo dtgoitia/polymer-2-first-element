@@ -6,27 +6,33 @@
 
 <dom-module id="car-filter">
   <template>
-    <style>
-      /* shadow DOM styles go here */
-      :host {
-        --primary-color: #408cff;
-        --background-color: #616161;
-        --text-color: rgba(0,0,0,0.8);
+    <custom-style>
+      <style>
+        /* shadow DOM styles go here */
+        :host {
+          --primary-color: #408cff;
+          --background-color: #616161;
+          --text-color: rgba(0,0,0,0.8);
 
-        display: inline-block;
-        width: 326px;
-        min-height: 535px;
-        padding-bottom: 2.7em;
-        padding-top: 1em;
-        padding-left: 3.5em;
-        font-family: 'Roboto', 'Noto', Arial, Helvetica, sans-serif;
-        background-color: white;
-        /* box-shadow: 0 5px 15px rgba(32, 32, 32, 0.6); */
-        color: var(--text-color);
-        
-        vertical-align: top;
-      }
-    </style>
+          display: inline-block;
+          width: 326px;
+          max-width: 500px;
+          min-height: 535px;
+          padding-bottom: 2.7em;
+          padding-top: 1em;
+          padding-left: 3.5em;
+          font-family: 'Roboto', 'Noto', Arial, Helvetica, sans-serif;
+          background-color: white;
+          box-shadow: 0 5px 15px rgba(32, 32, 32, 0.6);
+          color: var(--text-color);
+          
+          margin-top: 25px;
+          margin-right: 25px;
+
+          vertical-align: top;
+        }
+      </style>
+    </custom-style>
     
     <div>
       <h1>Filters</h1>
@@ -34,7 +40,6 @@
       <filter-makes makes={{makes}}></filter-makes>
       <filter-year></filter-year>
     </div>
-    
     
   </template>
   <script>

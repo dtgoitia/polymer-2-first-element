@@ -1,0 +1,74 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="./filter/car-filter.html">
+<link rel="import" href="./results/car-list.html">
+
+<dom-module id="my-app">
+  <template>
+    <custom-style>
+      <style>
+        :host {
+          --app-primary-color: #4285f4;
+          --app-primary-background-color: #FFFFFF;
+          --app-secondary-color: rgba(0, 0, 0, 0.8);
+          --app-secondary-background-color: #AAAAAA;
+
+          display: block;
+          margin: 0 auto;
+          width: 95vw;
+          height: 100vh;
+          /* overflow: scroll; */
+          background-color: var(--app-secondary-background-color);
+          font-family: 'Roboto', 'Noto', sans-serif;
+        }
+
+        .header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          color: var(--app-primary-color);
+          background-color: var(--app-primary-background-color);
+          font-size: 2.2em;
+          padding: 0.9em 1.3em 0.8em;
+          border-bottom: 1.5px solid var(--app-secondary-color);
+          z-index: 1000;
+        }
+
+        .content {
+          color: var(--app-secondary-color);
+          margin: 0 auto 0 auto;
+          padding-top: 9em;
+          max-width: 1300px;
+
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          justify-content: center;
+          align-items: flex-start;
+        }
+      </style>
+    </custom-style>
+
+    <div class="header">Cars Co.</div>
+    <div class="content">
+      <car-filter></car-filter>
+      <car-list data='[
+      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"}
+    ]'
+    ></car-list>
+    </div>
+  </template>
+
+  <script>
+    class MyApp extends Polymer.Element {
+      static get is() { return "my-app"}
+    }
+    
+    customElements.define(MyApp.is, MyApp);
+  </script>
+</dom-module>

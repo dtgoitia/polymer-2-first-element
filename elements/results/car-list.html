@@ -3,30 +3,33 @@
 
 <dom-module id="car-list">
   <template>
-    <style>
-      :host {
-        --primary-color: #408cff;
-        --background-color: #616161;
-        --text-color: rgba(0,0,0,0.8);
-        --border-radius: 5px;
+    <custom-style>
+      <style>
+        :host {
+          --primary-color: #408cff;
+          --background-color: #616161;
+          --text-color: rgba(0,0,0,0.8);
+          --border-radius: 5px;
 
-        display: inline-block;
-        border: 5px var(--primary-color) solid;
-      }
-    </style>
-    <div>
-      <template is="dom-repeat" items="{{data}}">
-        <car-card
-          make={{item.make}}
-          model={{item.model}}
-          price={{item.price}}
-          year={{item.year}}
-          milleage={{item.milleage}}
-          img-url={{item.imgUrl}}
-        >
-        </car-card>
-      </template>
-    </div>
+          display: inline-block;
+          /* border: 5px var(--primary-color) solid; */
+          margin: 0;
+          max-width: 850px;
+        }
+      </style>
+    </custom-style>
+    
+    <template is="dom-repeat" items="{{data}}">
+      <car-card
+        make={{item.make}}
+        model={{item.model}}
+        price={{item.price}}
+        year={{item.year}}
+        milleage={{item.milleage}}
+        img-url={{item.imgUrl}}
+      >
+      </car-card>
+    </template>
     
   </template>
   <script>

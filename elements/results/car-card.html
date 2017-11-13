@@ -4,60 +4,62 @@
 
 <dom-module id="car-card">
   <template>
-    <style>
-      /* shadow DOM styles go here */
-      :host {
-        --primary-color: #408cff;
-        --background-color: #616161;
-        --text-color: rgba(0,0,0,0.8);
-        --border-radius: 5px;
+    <custom-style>
+      <style>
+        /* shadow DOM styles go here */
+        :host {
+          --primary-color: #408cff;
+          --background-color: #616161;
+          --text-color: rgba(0,0,0,0.8);
+          --border-radius: 5px;
 
-        display: inline-block;
-        margin: 25px;
-        width: 354px;
-        height: 354px;
-        border-radius: var(--border-radius);
-        font-size: 23.2px;
-        font-family: 'Roboto', 'Noto', Arial, Helvetica, sans-serif;
-        background-color: white;
-        box-shadow: 0 5px 15px rgba(32, 32, 32, 0.6);
-        color: var(--text-color);
-      }
-      .data {
-        margin: 0;
-        height: 155px;
-        display: grid;
-        grid-template-columns: 50% auto;
-        grid-template-rows: 45% auto;
-        grid-column-gap: 5%;
-        grid-row-gap: 5%;
-      }
-      iron-image {
-        width: 100%;
-        height: 192px;
-        border-top-left-radius: var(--border-radius);
-        border-top-right-radius: var(--border-radius);
-      }
-      .data > div {
-        align-self: center;
-        justify-self: start;
-        padding: 0;
-        padding-left: 19px;
-      }
-      .col1 { grid-column-start: 1; grid-column-end: 2; }
-      .col2 { grid-column-start: 2; grid-column-end: 3; }
-      .big {
-        font-weight: 400;
-        grid-row-start: 1;
-        grid-row-end: 2;
-      }
-      .small {
-        grid-row-start: 2;
-        grid-row-end: 3;
-        font-size: 0.675em;
-        letter-spacing: -0.5px;
-      }
-    </style>
+          display: inline-block;
+          margin: 25px;
+          width: 354px;
+          height: 354px;
+          border-radius: var(--border-radius);
+          font-size: 23.2px;
+          font-family: 'Roboto', 'Noto', Arial, Helvetica, sans-serif;
+          background-color: white;
+          box-shadow: 0 5px 15px rgba(32, 32, 32, 0.6);
+          color: var(--text-color);
+        }
+        .data {
+          margin: 0;
+          height: 155px;
+          display: grid;
+          grid-template-columns: 50% auto;
+          grid-template-rows: 45% auto;
+          grid-column-gap: 5%;
+          grid-row-gap: 5%;
+        }
+        iron-image {
+          width: 100%;
+          height: 192px;
+          border-top-left-radius: var(--border-radius);
+          border-top-right-radius: var(--border-radius);
+        }
+        .data > div {
+          align-self: center;
+          justify-self: start;
+          padding: 0;
+          padding-left: 19px;
+        }
+        .col1 { grid-column-start: 1; grid-column-end: 2; }
+        .col2 { grid-column-start: 2; grid-column-end: 3; }
+        .big {
+          font-weight: 400;
+          grid-row-start: 1;
+          grid-row-end: 2;
+        }
+        .small {
+          grid-row-start: 2;
+          grid-row-end: 3;
+          font-size: 0.675em;
+          letter-spacing: -0.5px;
+        }
+      </style>
+    </custom-style>
     
     <iron-image src$="../../../assets/[[imgUrl]]" sizing="cover"></iron-image>
     

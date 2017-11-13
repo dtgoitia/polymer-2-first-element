@@ -3,32 +3,35 @@
 <!-- bower install --save PolymerElements/paper-checkbox -->
 
 <dom-module id="filter-year">
-    <template>
-        <style>
-          ul { list-style-type: none; padding: 0; margin: 0; }
-          li:first-of-type { padding-top: 0; }
-          li { padding: 3px 0; }
-          h3 {
-            margin-top: 1.1em;
-            margin-bottom: 0.4em;
-          }
-        </style>
-        
-        <h3>Year</h3>
-        <ul>
-          <template is="dom-repeat" items="{{years}}">
-            <li>
-              <paper-checkbox
-                id={{item.year}}
-                checked={{item.check}}
-                on-click="handleYearSelection"
-              >
-                {{item.year}}
-              </paper-checkbox>
-            </li>
-          </template>
-        </ul>
+  <template>
+    <custom-style>
+      <style>
+        ul { list-style-type: none; padding: 0; margin: 0; }
+        li:first-of-type { padding-top: 0; }
+        li { padding: 3px 0; }
+        h3 {
+          margin-top: 1.1em;
+          margin-bottom: 0.4em;
+        }
+      </style>
+    </custom-style>
+
+    <h3>Year</h3>
+    <ul>
+      <template is="dom-repeat" items="{{years}}">
+        <li>
+          <paper-checkbox
+            id={{item.year}}
+            checked={{item.check}}
+            on-click="handleYearSelection"
+          >
+            {{item.year}}
+          </paper-checkbox>
+        </li>
       </template>
+    </ul>
+  </template>
+  
   <script>
     class FilterYear extends Polymer.Element {
       static get is() { return "filter-year"; }

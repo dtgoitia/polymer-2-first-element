@@ -9,8 +9,7 @@
       window.Polymer.dom = 'shadow';
       */
     </script>
-    <link rel="import" href="../elements/filter/car-filter.html">
-    <link rel="import" href="../elements/results/car-list.html">
+    <link rel="import" href="../elements/my-app.html">
     <style>
         :root {
           background-color: #aaa;
@@ -18,21 +17,13 @@
           --background-color: #616161;
           --text-color: rgba(0,0,0,0.8);
         }
-        car-filter {
+        body {
+          margin: 0;
           font-size: 16px;
         }
       </style>
   </head>
   <body>
-    <car-filter></car-filter>
-    <car-list data='[
-      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
-      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
-      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
-      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
-      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
-      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"}
-    ]'
-    ></car-list>
+    <my-app></my-app>
   </body>
 </html>

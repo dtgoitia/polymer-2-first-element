@@ -4,29 +4,33 @@
 
 <dom-module id="filter-price">
   <template>
-    <style>
-      :host {
-        margin: 0;
-        padding: 0;
-      }
-      h3 {
-        padding-top: 2.1em;
-        margin-bottom: 0.7em;
-      }
-      paper-slider {
-        width: 284px;
-        margin-left: 0px;
-        margin-left: calc(- 15px - var(--calculated-paper-slider-height)/2);
-        margin-bottom: 0.6em;
-        --paper-slider-height: 5px;
-        --paper-slider-active-color: var(--primary-color);
-        --paper-slider-knob-color: var(--primary-color);
-        --paper-slider-container-color: rgba(0,0,0,0.6);
-      }
-      #priceLabel {
-        color: var(--text-color);
-      }
-    </style>
+
+    <custom-style>
+      <style>
+        :host {
+          margin: 0;
+          padding: 0;
+        }
+        h3 {
+          padding-top: 2.1em;
+          margin-bottom: 0.7em;
+        }
+        paper-slider {
+          width: 284px;
+          margin-left: 0px;
+          margin-left: calc(- 15px - var(--calculated-paper-slider-height)/2);
+          margin-bottom: 0.6em;
+          --paper-slider-height: 5px;
+          --paper-slider-active-color: var(--primary-color);
+          --paper-slider-knob-color: var(--primary-color);
+          --paper-slider-container-color: rgba(0,0,0,0.6);
+        }
+        #priceLabel {
+          color: var(--text-color);
+        }
+      </style>
+    </custom-style>
+    
     <h3>Price Range</h3>
     <paper-slider
       id="superSlider"
@@ -38,7 +42,9 @@
     >
     </paper-slider>
     <div id="priceLabel">£[[priceString]]</div>
+
   </template>
+  
   <script>
     class FilterPrice extends Polymer.Element {
       static get is() { return "filter-price"; }
@@ -59,15 +65,20 @@
       }
       formatSlider(){
         const sliderNode = document
-          .querySelector('car-filter').shadowRoot
-          .querySelector('filter-price').shadowRoot
-          .querySelector('paper-slider').shadowRoot
+          .querySelector('my-app').shadowRoot
+          .querySelector('car-filter')
+          .shadowRoot
+          .querySelector('filter-price')
+          .shadowRoot
+          .querySelector('paper-slider')
+          .shadowRoot
           .querySelector('#sliderContainer');
         sliderNode.style.marginLeft = "0px";
         sliderNode.style.marginRight = "0px";
       }
       formatSliderKnob(){
         const knobNode = document
+          .querySelector('my-app').shadowRoot
           .querySelector('car-filter').shadowRoot
           .querySelector('filter-price').shadowRoot
           .querySelector('paper-slider').shadowRoot
