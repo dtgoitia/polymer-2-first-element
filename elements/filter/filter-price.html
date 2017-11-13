@@ -33,12 +33,11 @@
     
     <h3>Price Range</h3>
     <paper-slider
-      id="superSlider"
       min="0"
-      max={{maxprice}}
-      step={{step}}
-      value="{{price}}"
-      on-change="priceChange"
+      max={{prices.max}}
+      step={{prices.step}}
+      value="{{prices.price}}"
+      on-change="handlePriceChange"
     >
     </paper-slider>
     <div id="priceLabel">£[[priceString]]</div>
@@ -48,12 +47,11 @@
   <script>
     class FilterPrice extends Polymer.Element {
       static get is() { return "filter-price"; }
+      
       static get properties() {
         return {
-          maxprice:    { type: Number, value: 25000 },
-          price:       { type: Number, value: 20000 },
-          priceString: { type: String },
-          step:        { type: Number, value: 1000  }
+          prices: { type: Object },
+          priceString: { type: String }
         }
       }
 
@@ -63,6 +61,7 @@
         this.formatPrice();
         this.formatSlider();
       }
+
       formatSlider(){
         const sliderNode = document
           .querySelector('my-app').shadowRoot
@@ -76,6 +75,7 @@
         sliderNode.style.marginLeft = "0px";
         sliderNode.style.marginRight = "0px";
       }
+
       formatSliderKnob(){
         const knobNode = document
           .querySelector('my-app').shadowRoot
@@ -87,16 +87,21 @@
         knobNode.style["boxShadow"] = "0 3px 15px var(--background-color)";
         knobNode.style.transform = "scale(1.3)";
       }
+
       formatPrice(){
-        this.priceString = numeral(this.price).format('0,0');
+        this.priceString = numeral(this.prices.price).format('0,0');
       }
-      priceChange(){
-        // Pass this.price to the parent to update filters
+      
+      handlePriceChange(){
+        // Send the data upwards to top parend element, and then call
+        // updateResults() so that <my-app> element calls the API to
+        // update the results based on the new data.
         this.formatPrice()
-        console.log(this.price);
-        return null;
+        this.set('this.prices', this.prices);
+        this.updateResults();
       }
     }
+    
     customElements.define(FilterPrice.is, FilterPrice);
   </script>
 </dom-module>

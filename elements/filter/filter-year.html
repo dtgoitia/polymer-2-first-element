@@ -25,7 +25,7 @@
             checked={{item.check}}
             on-click="handleYearSelection"
           >
-            {{item.year}}
+            [[item.year]]
           </paper-checkbox>
         </li>
       </template>
@@ -35,23 +35,23 @@
   <script>
     class FilterYear extends Polymer.Element {
       static get is() { return "filter-year"; }
+      
       static get properties() {
         return {
-          years: {
-            type: Object,
-            value:[
-              { "year": 2016, "check": false },
-              { "year": 2015, "check": false  }
-            ]
-          }
+          years: { type: Object },
+          updateResults: { type: Function }
         }
       }
+
       handleYearSelection(){
-        // Pass this.year to the parent to update filters
-        console.log(this.years);
-        return null;
+        // Send the data upwards to top parend element, and then call
+        // updateResults() so that <my-app> element calls the API to
+        // update the results based on the new data.
+        this.set('this.years', this.years);
+        this.updateResults();
       }
     }
+
     customElements.define(FilterYear.is, FilterYear);
   </script>
 </dom-module>

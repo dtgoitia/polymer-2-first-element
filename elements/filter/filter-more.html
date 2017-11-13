@@ -10,6 +10,7 @@
   <script>
     class FilterMore extends Polymer.Element {
       static get is() { return "filter-more"; }
+
       static get properties() {
         return {
           collapsed: {
@@ -18,12 +19,14 @@
           }
         }
       }
+
       handleClick() {
         console.log('iron-collapse!');
         this.collapsed = !this.collapsed;
         console.log('this.collapsed:', this.collapsed);
       }
     }
+    
     customElements.define(FilterMore.is, FilterMore);
   </script>
 </dom-module>

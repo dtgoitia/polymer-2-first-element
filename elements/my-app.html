@@ -13,10 +13,11 @@
           --app-secondary-background-color: #AAAAAA;
 
           display: block;
-          margin: 0 auto;
+          margin: 0 auto 4em;
           width: 95vw;
-          height: 100vh;
+          min-height: 100vh;
           /* overflow: scroll; */
+          overflow: visible;
           background-color: var(--app-secondary-background-color);
           font-family: 'Roboto', 'Noto', sans-serif;
         }
@@ -51,15 +52,12 @@
 
     <div class="header">Cars Co.</div>
     <div class="content">
-      <car-filter></car-filter>
-      <car-list data='[
-      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
-      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
-      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
-      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
-      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
-      { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"}
-    ]'
+      <car-filter
+        update-results={{updateResults}}
+        filter-data={{filterData}}
+      >
+      </car-filter>
+      <car-list data={{results}}
     ></car-list>
     </div>
   </template>
@@ -67,6 +65,49 @@
   <script>
     class MyApp extends Polymer.Element {
       static get is() { return "my-app"}
+      static get properties() {
+        return {
+          filterData: {
+            type: Object,
+            value: {
+              prices: {
+                "max": 25000,
+                "price": 20000,
+                "step": 1000
+              },
+              makes: [
+                { "make": "Benz", "check": false },
+                { "make": "BMW",  "check": false },
+                { "make": "Audi", "check": false }
+              ],
+              years: [
+                { "year": 2015, "check": false },
+                { "year": 2016, "check": false }
+              ]
+            }
+          },
+          results: {
+            type: Array,
+            value: [
+              { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+              { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+              { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+              { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+              { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"},
+              { "make": "make", "model":"model", "price":"20000", "year":"year", "milleage":"milleage", "imgUrl":"car-image.png"}
+            ]
+          }
+        }
+      }
+
+      constructor() {
+        super();
+        this.updateResults = this.updateResults.bind(this);
+      }
+
+      updateResults() {
+        console.log('MyApp.updateResults() called');
+      }
     }
     
     customElements.define(MyApp.is, MyApp);

@@ -73,7 +73,8 @@
   </template>
   <script>
     class CarCard extends Polymer.Element {
-      static get is() { return "car-card"; }
+      static get is() { return "car-card" }
+
       static get properties() {
         return {
           make: { type: String },
@@ -84,9 +85,6 @@
           imgUrl: {type: String}
         }
       }
-      constructor() {
-        super();
-      }
 
       ready() {
         super.ready();
@@ -95,15 +93,9 @@
 
       formatPrice() {
         this.price = numeral(this.price).format('0,0');
-        // console.log('price:', typeof this.price);
-        // const stringLength = this.price.length;
-        // const priceNewValue = this.price.substring(stringLength - 3);
-        // // const priceNewValue = Number(this.price);
-        // console.log('price new value:', priceNewValue, '(' +  typeof priceNewValue + ')')
-        // const test = numeral(this.price).format('0,0');
-        // console.log(test);
       }
     }
+
     customElements.define(CarCard.is, CarCard);
   </script>
 </dom-module>

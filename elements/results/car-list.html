@@ -35,19 +35,14 @@
   <script>
     class CarList extends Polymer.Element {
       static get is() { return "car-list"; }
+      
       static get properties() {
         return {
           data: {type: Array},
         }
       }
-      constructor() {
-        super();
-      }
-      ready() {
-        super.ready();
-        console.log('CarList.data:', this.data);
-      }
     }
+
     customElements.define(CarList.is, CarList);
   </script>
 </dom-module>
