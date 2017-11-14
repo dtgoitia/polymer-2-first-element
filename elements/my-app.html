@@ -1,4 +1,7 @@
 <link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../promise-polyfill/promise-polyfill-lite.html">
+<!-- bower install --save PolymerLabs/iron-ajax -->
+<!-- bower install --save PolymerLabs/promise-polyfill -->
 <link rel="import" href="./filter/car-filter.html">
 <link rel="import" href="./results/car-list.html">
 
@@ -51,6 +54,14 @@
       </style>
     </custom-style>
 
+    <iron-ajax
+      auto
+      url="{{url}}"
+      handle-as="json"
+      on-response="_carsLoaded"
+      debounce-duration="300"
+    ></iron-ajax>
+
     <div class="header">Cars Co.</div>
     <div class="content">
       <car-filter
@@ -99,11 +110,11 @@
               {"make":"HONDA","model":"CIVIC","price":12000,"year":2015,"image":"http://contentservice.mc.reyrey.net/image_v1.0.0/61806229"},
               {"make":"JEEP","model":"CHEROKEE","price":10000,"year":2015,"image":"http://blogs-images.forbes.com/kbrauer/files/2015/05/2015-Jeep-Cherokee-Front.jpg?width=960"},
               {"make":"KIA","model":"SOUL","price":11000,"year":2015,"image":"https://i.ytimg.com/vi/O1XUiUSDU6k/hqdefault.jpg"},
-              {"make":"LAND ROVER","model":"RANGE ROVER","price":50000,"year":2015,"image":"http://tcledev.com/wp-content/uploads/2015/07/2015-Land-Rover-Range-Rover-Great-CarPhoto.jpg"},
+              {"make":"LAND ROVER","model":"RANGE ROVER","price":50000,"year":2015,"image":"https://blog.caranddriver.com/wp-content/uploads/2016/02/2016-Land-Rover-Range-Rover-Holland-Holland-Edition-PLACEMENT-626x382.jpg"},
               {"make":"MASERATI","model":"GRANTURISMO","price":10000,"year":2015,"image":"http://spidercars.net/wp-content/uploads/images/2015-Maserati-GranTurismo_1040.jpg"},
               {"make":"MERCEDES-BENZ","model":"SLS AMG","price":10000,"year":2015,"image":"http://www.cstatic-images.com/stock/900x600/1425674997269.jpg"},
               {"make":"PORSCHE","model":"911","price":20000,"year":2015,"image":"http://media.caranddriver.com/images/14q4/638371/2015-porsche-911-gts-photos-and-info-news-car-and-driver-photo-640321-s-450x274.jpg"},
-              {"make":"RENAULT","model":"CLIO","price":10000,"year":2015,"image":"http://www.kearys.ie/imglib/KearysResponsive2014/why-buy-the-2015-renault-clio-exterior.jpg"},
+              {"make":"RENAULT","model":"CLIO","price":10000,"year":2015,"image":"http://images.car.bauercdn.com/upload/30579/images/1040x585/000054cdb850-c86f-4626-8.jpg?mode=pad"},
               {"make":"SMART","model":"FORTWO","price":25000,"year":2015,"image":"http://images.car.bauercdn.com/upload/32819/images/001_2fortwo.jpg"},
               {"make":"TESLA","model":"S","price":40000,"year":2015,"image":"http://www.thetechherald.com/wp-content/uploads/2015/12/tesla-model-s.jpg"},
               {"make":"TOYOTA","model":"PRIUS","price":15000,"year":2015,"image":"http://images.hgmsites.net/hug/2015-toyota-prius-5dr-hb-three-natl-angular-front-exterior-view_100485217_h.jpg"},
@@ -111,6 +122,10 @@
               {"make":"VOLKSWAGEN","model":"GOLF","price":23000,"year":2016,"image":"http://st.motortrend.com/uploads/sites/10/2015/09/2015-volkswagen-golf-gti-front-angle.jpg"},
               {"make":"VOLVO","model":"XC90","price":49000,"year":2016,"image":"http://s3.caradvice.com.au/thumb/960/500/wp-content/uploads/2015/09/volvo-xc90-d5-momentum-2015-58.jpg"}
             ]
+          },
+          url: {
+            type: String,
+            value: 'http://localhost:3000/api/cars'
           }
         }
       }
@@ -122,6 +137,12 @@
 
       updateResults() {
         console.log('MyApp.updateResults() called');
+      }
+
+      _carsLoaded(e) {
+        const data = e.detail.response;
+        console.log('API reponse:');
+        console.log(data);
       }
     }
     
