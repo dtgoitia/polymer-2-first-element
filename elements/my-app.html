@@ -63,7 +63,7 @@
       debounce-duration="300"
     ></iron-ajax>
 
-    <div class="header">Cars Co.</div>
+    <div class="header" onclick={{tempShowResults}}>Cars Co.</div>
     <div id="content" class="content">
       <template is="dom-if" if={{filterData}}>
         <car-filter update-results={{updateResults}} filter-data={{filterData}}></car-filter>
@@ -81,32 +81,17 @@
             type: Array,
             value: ['price', 'make', 'year']
           },
-          filterData: { type: Object },
+          filterData: {
+            type: Object,
+            observer: 'filterDataChanged'
+          },
+          firstLoad: {
+            type: Boolean,
+            value: true
+          },
           results: {
             type: Array,
-            // value: []
-            value: [
-              {"make":"ALFA ROMEO","model":"4C","price":20000,"year":2015,"image":"http://blog.caranddriver.com/wp-content/uploads/2014/06/2015-Alfa-Romeo-4C-Launch-Edition-PLACEMENT-626x382.jpg"},
-              {"make":"AUDI","model":"A4","price":29000,"year":2015,"image":"http://media.caranddriver.com/images/13q4/543506/2015-audi-a4-rendered-detailed-news-car-and-driver-photo-560015-s-450x274.jpg"},
-              {"make":"AUDI","model":"TT QUATTRO","price":45000,"year":2015,"image":"http://www.dpccars.com/gallery/var/resizes/Silver-2015-Audi-TT-in-snow-photoshoot/Silver%202015%20Audi%20TT%20in%20snow%20photoshoot%20(2).jpg"},
-              {"make":"BENTLEY","model":"CONTINENTAL","price":49000,"year":2015,"image":"http://ag-spots-2015.o.auroraobjects.eu/2015/01/26/bentley-continental-gt-speed-2015-c663026012015045948_1.jpg"},
-              {"make":"BMW","model":"328D","price":35000,"year":2015,"image":"https://acarisnotarefrigerator.files.wordpress.com/2013/11/2014-bmw-328d-wagon-front.jpg"},
-              {"make":"FORD","model":"C-MAX","price":15000,"year":2015,"image":"http://images.car.bauercdn.com/upload/33216/images/1752x1168/grand-c-max-01.jpg?mode=max&quality=90&scale=down"},
-              {"make":"HONDA","model":"CIVIC","price":12000,"year":2015,"image":"http://contentservice.mc.reyrey.net/image_v1.0.0/61806229"},
-              {"make":"JEEP","model":"CHEROKEE","price":10000,"year":2015,"image":"http://blogs-images.forbes.com/kbrauer/files/2015/05/2015-Jeep-Cherokee-Front.jpg?width=960"},
-              {"make":"KIA","model":"SOUL","price":11000,"year":2015,"image":"https://i.ytimg.com/vi/O1XUiUSDU6k/hqdefault.jpg"},
-              {"make":"LAND ROVER","model":"RANGE ROVER","price":50000,"year":2015,"image":"https://blog.caranddriver.com/wp-content/uploads/2016/02/2016-Land-Rover-Range-Rover-Holland-Holland-Edition-PLACEMENT-626x382.jpg"},
-              {"make":"MASERATI","model":"GRANTURISMO","price":10000,"year":2015,"image":"http://spidercars.net/wp-content/uploads/images/2015-Maserati-GranTurismo_1040.jpg"},
-              {"make":"MERCEDES-BENZ","model":"SLS AMG","price":10000,"year":2015,"image":"http://www.cstatic-images.com/stock/900x600/1425674997269.jpg"},
-              {"make":"PORSCHE","model":"911","price":20000,"year":2015,"image":"http://media.caranddriver.com/images/14q4/638371/2015-porsche-911-gts-photos-and-info-news-car-and-driver-photo-640321-s-450x274.jpg"},
-              {"make":"RENAULT","model":"CLIO","price":10000,"year":2015,"image":"http://images.car.bauercdn.com/upload/30579/images/1040x585/000054cdb850-c86f-4626-8.jpg?mode=pad"},
-              {"make":"SMART","model":"FORTWO","price":25000,"year":2015,"image":"http://images.car.bauercdn.com/upload/32819/images/001_2fortwo.jpg"},
-              {"make":"TESLA","model":"S","price":40000,"year":2015,"image":"http://www.thetechherald.com/wp-content/uploads/2015/12/tesla-model-s.jpg"},
-              {"make":"TOYOTA","model":"PRIUS","price":15000,"year":2015,"image":"http://images.hgmsites.net/hug/2015-toyota-prius-5dr-hb-three-natl-angular-front-exterior-view_100485217_h.jpg"},
-              {"make":"TOYOTA","model":"RAV4","price":22000,"year":2015,"image":"http://www.iihs.org/frontend/iihs/ratings/images/api-model-year-image.ashx?id=1863&width=730"},
-              {"make":"VOLKSWAGEN","model":"GOLF","price":23000,"year":2016,"image":"http://st.motortrend.com/uploads/sites/10/2015/09/2015-volkswagen-golf-gti-front-angle.jpg"},
-              {"make":"VOLVO","model":"XC90","price":49000,"year":2016,"image":"http://s3.caradvice.com.au/thumb/960/500/wp-content/uploads/2015/09/volvo-xc90-d5-momentum-2015-58.jpg"}
-            ]
+            value: []
           },
           url: {
             type: String,
@@ -118,14 +103,90 @@
       constructor() {
         super();
         this.updateResults = this.updateResults.bind(this);
+        this.callUpdateResults = this.callUpdateResults.bind(this);
+      }
+
+      filterDataChanged(newValue, oldValue) {
+        console.log('MyApp.filterDataChanged()');
+        // console.log('  this.filterData', this.filterData);
+        console.log('  newValue', newValue);
+        console.log('  oldValue', oldValue);
+      }
+
+      getSingleUrlParameterFromFilterData(data, key) {
+        // console.log('getSingleUrlParameterFromFilterData');
+        // console.log('  data:', data);
+        // console.log('  key:', key);
+        // console.log('  data[' + key + ']:', data[key]);
+        const values = [];
+        // filterData[key].map(entry => entry.check ? values.push(entry[key]) : null);
+        
+        const dataValues = data[key];
+        // console.log('  dataValues:', dataValues);
+        // console.log('  dataValues[0]:', dataValues[0]);
+        dataValues.map(entry => {
+          // console.log('  entry:', entry);
+          // console.log('  entry.check:', entry.check);
+          return entry.check ? values.push(entry[key]) : null
+        });
+        // console.log('getSingleUrlParameterFromFilterData\n  values:', values);
+        if ( values.length > 0 ) {
+          const valuesString = values.join(',');
+          // console.log('  valuesString:', valuesString);
+          return valuesString;
+        } else {
+          return null;
+        }
+      }
+
+      getAllUrlParametersFromFilterData(data) {
+
+        // console.log('MyApp.getAllUrlParametersFromFilterData()\ndata:', data);
+        let url = '/api/cars';
+        const filterDataTrimmed = {};
+        filterDataTrimmed.make = this.getSingleUrlParameterFromFilterData(data, 'make');
+        filterDataTrimmed.year = this.getSingleUrlParameterFromFilterData(data, 'year');
+        filterDataTrimmed.price = data.price.price.toString();
+
+        // console.log('getAllUrlParametersFromFilterData.filterDataTrimmed()\nthis.filterData:', this.filterData);
+        // console.log('getAllUrlParametersFromFilterData.filterDataTrimmed()\nfilterDataTrimmed:', filterDataTrimmed);
+
+        // console.log('serializeQueryObject(filterDataTrimmed):', this.serializeQueryObject(filterDataTrimmed));
+        return '/api/cars?' + this.serializeQueryObject(filterDataTrimmed);
+      }
+
+      serializeQueryObject(queryObject) {
+        const parameterArray = [];
+        Object.getOwnPropertyNames(queryObject).map(key => {
+          const value = queryObject[key];
+          if ( value !== null) {
+            let valueString;
+            if (Array.isArray(value)) {
+              valueString = value.join(',');
+            }
+            valueString
+              ? parameterArray.push(key + '=' + valueString)
+              : parameterArray.push(key + '=' + value)
+          }
+        })
+        return encodeURI(parameterArray.join('&'));
       }
 
       updateResults() {
-        console.log('MyApp.updateResults() called');
-        console.log('MyApp.updateResults():\nthis.filterData', this.filterData);
-        this.getUrlFromFilterData()
-
-        // CONVERT this.filterData into a string to be sent to iron-ajax
+        setTimeout(this.callUpdateResults, 0);
+        // this.callUpdateResults()
+      }
+      callUpdateResults() {
+        // console.log('MyApp.updateResults() called');
+        // console.log('MyApp.updateResults():\nthis.filterData', this.filterData);
+        console.log('callUpdateResults() called');
+        const currentFilterData = Object.assign(this.filterData);
+        // console.log('MyApp.updateResults():\ncurrentFilterData', currentFilterData);
+        const urlParameters = this.getAllUrlParametersFromFilterData(currentFilterData);
+        const newUrl = 'http://localhost:3000' + urlParameters;
+        console.log('MyApp.callUpdateResults()\nnewUrl', newUrl);
+        this.set('url', newUrl);
+        // console.log('MyApp.updateResults():\nnewUrl', newUrl);
       }
 
       getValuesPerKey(objectArray, key) {
@@ -150,13 +211,13 @@
         const maxPrice = priceArray.reduce((pre, cur) => {
           return Math.max(pre, cur);
         });
-        return { max: maxPrice, price: priceArray[0], step: 1000 };
+        return { max: maxPrice, price: maxPrice, step: 1000 };
       }
 
       getMakeFilterData(makeArray) {
         return(
           makeArray.map(make => {
-            return { make: make, check: true };
+            return { make: make, check: false };
           })
         );
       }
@@ -164,7 +225,7 @@
       getYearFilterData(yearArray) {
         return(
           yearArray.map(make => {
-            return { year: make, check: true };
+            return { year: make, check: false };
           })
         );
       }
@@ -176,22 +237,45 @@
           availableFilterData[key] = values;
         });
 
-        return {
-          price: this.getPriceFilterData(availableFilterData.price),
-          make: this.getMakeFilterData(availableFilterData.make),
-          year: this.getYearFilterData(availableFilterData.year)
-        };
+        const returnObject = {};
+        const priceFilterData = availableFilterData.price ? this.getPriceFilterData(availableFilterData.price) : null;
+        // console.log('priceFilterData', priceFilterData);
+        const makeFilterData = availableFilterData.make ? this.getMakeFilterData(availableFilterData.make) : null;
+        // console.log('makeFilterData', makeFilterData);
+        const yearFilterData = availableFilterData.year ? this.getYearFilterData(availableFilterData.year) : null;
+        // console.log('yearFilterData', yearFilterData);
+        priceFilterData !== null ? returnObject.price = priceFilterData : null;
+        makeFilterData !== null ? returnObject.make = makeFilterData : null;
+        yearFilterData !== null ? returnObject.year = yearFilterData : null;
+        
+        // console.log('MyApp.getAvailableFilterData():\nreturnObject:', returnObject);
+
+        return returnObject;
       }
-      
+
       // ready() {
       //   super.ready();
       //   console.log('MyApp.ready()');
       // }
 
       _carsLoaded(e) {
-        // console.log('MyApp._carsLoaded()')
+        console.log('MyApp._carsLoaded()')
         const data = e.detail.response;
-        this.set('filterData', this.getAvailableFilterData(data));
+        // console.log('MyApp._carsLoaded()\nreceived data:', data);
+        // console.log('MyApp.filterData:', this.filterData);
+        if (this.firstLoad) {
+          this.set('filterData', this.getAvailableFilterData(data));
+          console.log('MyApp._carsLoaded() > filterData updated');
+          this.set('results', data);
+          console.log('MyApp._carsLoaded() > results updated');
+          this.set('firstLoad', false);
+          console.log('MyApp._carsLoaded() > firstLoad updated');
+        } else {
+          this.set('results', data);
+          console.log('MyApp._carsLoaded() > results updated');
+          // console.log('this.results:', this.results);
+        }
+        // console.log('MyApp.filterData:', this.filterData);
         // console.log('MyApp.filterData updated');
       }
 

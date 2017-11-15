@@ -43,6 +43,7 @@
       </filter-price>
       <filter-make
         makes={{filterData.make}}
+        shownMakes={{filterData.make}}
         update-results={{updateResults}}
       >
       </filter-make>
@@ -59,9 +60,24 @@
       static get is() { return "car-filter"; }
       static get properties() {
         return {
-          filterData:    { type: Object },
+          filterData: {
+            type: Object
+          },
           updateResults: { type: Function }
         }
+      }
+
+      static get observers() {
+        return [
+          // Observer method name, followed by a list of dependencies, in parenthesis
+          'filterDataChanged(filterData.*)'
+        ]
+      }
+
+      filterDataChanged(changes) {
+        // console.log('CarFilter.filterDataChanged()', changes);
+        // console.log('  notifying change at', changes.path, 'to', changes.value);
+        this.updateResults();
       }
     }
 

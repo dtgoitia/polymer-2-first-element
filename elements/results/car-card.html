@@ -79,15 +79,17 @@
         return {
           make: { type: String },
           model: { type: String },
-          price: { type: String },
+          price: {
+            type: String,
+            observer: 'priceChanged'
+          },
           year: { type: String },
           milleage: { type: String },
           image: {type: String}
         }
       }
 
-      ready() {
-        super.ready();
+      priceChanged(){
         this.formatPrice();
       }
 
