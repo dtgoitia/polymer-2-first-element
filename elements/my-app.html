@@ -1,5 +1,6 @@
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../promise-polyfill/promise-polyfill-lite.html">
+<link rel="import" href="../../iron-ajax/iron-ajax.html">
 <!-- bower install --save PolymerLabs/iron-ajax -->
 <!-- bower install --save PolymerLabs/promise-polyfill -->
 <link rel="import" href="./filter/car-filter.html">
@@ -56,20 +57,18 @@
 
     <iron-ajax
       auto
-      url="{{url}}"
+      url={{url}}
       handle-as="json"
       on-response="_carsLoaded"
       debounce-duration="300"
     ></iron-ajax>
 
     <div class="header">Cars Co.</div>
-    <div class="content">
-      <car-filter
-        update-results={{updateResults}}
-        filter-data={{filterData}}
-      >
-      </car-filter>
-      <car-list data={{results}}></car-list>
+    <div id="content" class="content">
+      <template is="dom-if" if={{filterData}}>
+        <car-filter update-results={{updateResults}} filter-data={{filterData}}></car-filter>
+        <car-list data={{results}}></car-list>
+      </template>
     </div>
   </template>
 
@@ -78,25 +77,11 @@
       static get is() { return "my-app"}
       static get properties() {
         return {
-          filterData: {
-            type: Object,
-            value: {
-              prices: {
-                "max": 25000,
-                "price": 20000,
-                "step": 1000
-              },
-              makes: [
-                { "make": "Benz", "check": false },
-                { "make": "BMW",  "check": false },
-                { "make": "Audi", "check": false }
-              ],
-              years: [
-                { "year": 2015, "check": false },
-                { "year": 2016, "check": false }
-              ]
-            }
+          acceptedFilterKeys: {
+            type: Array,
+            value: ['price', 'make', 'year']
           },
+          filterData: { type: Object },
           results: {
             type: Array,
             // value: []
@@ -137,13 +122,85 @@
 
       updateResults() {
         console.log('MyApp.updateResults() called');
+        console.log('MyApp.updateResults():\nthis.filterData', this.filterData);
+        this.getUrlFromFilterData()
+
+        // CONVERT this.filterData into a string to be sent to iron-ajax
       }
 
-      _carsLoaded(e) {
-        const data = e.detail.response;
-        console.log('API reponse:');
-        console.log(data);
+      getValuesPerKey(objectArray, key) {
+        const allMakesNoRepeat = [];
+        
+        // Get all values associated to passed key
+        const allValues = objectArray.map((object, i) => {
+          return object.hasOwnProperty(key) ? object[key] : null;
+        });
+        
+        // Eliminate duplicated values
+        allValues.map(value => {
+          if (value !== null && allMakesNoRepeat.includes(value) === false ) {
+            allMakesNoRepeat.push(value);
+          }
+        });
+
+        return allMakesNoRepeat.length > 0 ? allMakesNoRepeat : null;
       }
+
+      getPriceFilterData(priceArray) {
+        const maxPrice = priceArray.reduce((pre, cur) => {
+          return Math.max(pre, cur);
+        });
+        return { max: maxPrice, price: priceArray[0], step: 1000 };
+      }
+
+      getMakeFilterData(makeArray) {
+        return(
+          makeArray.map(make => {
+            return { make: make, check: true };
+          })
+        );
+      }
+
+      getYearFilterData(yearArray) {
+        return(
+          yearArray.map(make => {
+            return { year: make, check: true };
+          })
+        );
+      }
+
+      getAvailableFilterData(availableData) {
+        const availableFilterData = {};
+        this.acceptedFilterKeys.map(key => {
+          const values = this.getValuesPerKey(availableData, key);
+          availableFilterData[key] = values;
+        });
+
+        return {
+          price: this.getPriceFilterData(availableFilterData.price),
+          make: this.getMakeFilterData(availableFilterData.make),
+          year: this.getYearFilterData(availableFilterData.year)
+        };
+      }
+      
+      // ready() {
+      //   super.ready();
+      //   console.log('MyApp.ready()');
+      // }
+
+      _carsLoaded(e) {
+        // console.log('MyApp._carsLoaded()')
+        const data = e.detail.response;
+        this.set('filterData', this.getAvailableFilterData(data));
+        // console.log('MyApp.filterData updated');
+      }
+
+      /*  1. On load, fetch all cars
+          2. Get all available makes, prices and years for the filter data
+          3. Call API with desired data:
+            3.1. write function to: filterData => urlParameters
+            - If all make or year are false, show all (only apply price filter)
+      */
     }
     
     customElements.define(MyApp.is, MyApp);

@@ -6,7 +6,7 @@
 <!-- bower install --save PolymerElements/paper-checkbox -->
 <!-- bower install --save toggle-icon -->
 
-<dom-module id="filter-makes">
+<dom-module id="filter-make">
   <template>
     
     <custom-style>
@@ -48,8 +48,8 @@
   </template>
 
   <script>
-    class FilterMakes extends Polymer.Element {
-      static get is() { return "filter-makes"; }
+    class FilterMake extends Polymer.Element {
+      static get is() { return "filter-make"; }
       static get properties() {
         return {
           makes: {
@@ -134,6 +134,6 @@
       }
     }
 
-    customElements.define(FilterMakes.is, FilterMakes);
+    customElements.define(FilterMake.is, FilterMake);
   </script>
 </dom-module>
