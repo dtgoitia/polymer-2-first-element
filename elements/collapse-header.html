@@ -1,0 +1,59 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-media-query/iron-media-query.html">
+
+<dom-module id="collapse-header">
+  <template>
+    <!-- <custom-style>
+      <style>
+        :host {
+          --primary-color: #408cff;
+          --background-color: #616161;
+          --text-color: rgba(0,0,0,0.8);
+          --border-radius: 5px;
+        }
+      </style>
+    </custom-style> -->
+    <iron-media-query
+      query="{{query}}"
+      query-matches="{{queryMatches}}">
+    </iron-media-query>
+
+    <template is="dom-if" if={{queryMatches}}>>
+      <div style="width:900px;height:300px;background-color:black;"></div>
+    </template>
+    
+  </template>
+  <script>
+    class CollapseHeader extends Polymer.Element {
+      static get is() { return "collapse-header"; }
+      
+      static get properties() {
+        return {
+          query: {
+            type: String
+            // observer: 'queryChanged'
+          },
+          queryMatches: {
+            type: Boolean,
+            observer: 'queryMatchesChanged'
+          }
+        }
+      }
+
+
+
+      // queryChanged() {
+      //   console.log('CollapseHeader.queryChanged()');
+      //   console.log('  .query:', this.query);
+      //   console.log('  .queryMatches:', this.queryMatches);
+      // }
+      queryMatchesChanged(e) {
+        console.log('CollapseHeader.queryMatchesChanged()');
+        console.log('  .query', this.query);
+        console.log('  .queryMatches', this.queryMatches);
+      }
+    }
+
+    customElements.define(CollapseHeader.is, CollapseHeader);
+  </script>
+</dom-module>

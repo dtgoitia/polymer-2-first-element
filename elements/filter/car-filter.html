@@ -8,7 +8,6 @@
   <template>
     <custom-style>
       <style>
-        /* shadow DOM styles go here */
         :host {
           --primary-color: #408cff;
           --background-color: #616161;
@@ -35,50 +34,53 @@
     </custom-style>
     
     <div>
+      <template is="dom-if" if={{desktopDevice}}>
+        <h1 on-click='handleFilterUpdate'>desktop view!</h1>
+      </template>
+      <template is="dom-if" if={{mobileDevice}}>
+        <h1 on-click='handleFilterUpdate'>mobile view!</h1>
+      </template>
       <h1 on-click='handleFilterUpdate'>Filters</h1>
-      <filter-price
-        prices={{filterData.price}}
-        update-results={{updateResults}}
-      >
-      </filter-price>
-      <filter-make
-        makes={{filterData.make}}
-        shownMakes={{filterData.make}}
-        update-results={{updateResults}}
-      >
-      </filter-make>
-      <filter-year
-        years={{filterData.year}}
-        update-results={{updateResults}}
-      >
-      </filter-year>
+      <filter-price prices={{filterData.price}}></filter-price>
+      <filter-make makes={{filterData.make}} shown-makes={{filterData.make}}></filter-make>
+      <filter-year years={{filterData.year}}></filter-year>
     </div>
     
   </template>
+
   <script>
+  
     class CarFilter extends Polymer.Element {
       static get is() { return "car-filter"; }
+      
       static get properties() {
         return {
           filterData:    { type: Object },
-          updateResults: { type: Function }
+          updateResults: { type: Function },
+          desktopDevice: { type: Boolean },
+          mobileDevice:  { type: Boolean }
         }
       }
 
       static get observers() {
         return [
-          // Observer method name, followed by a list of dependencies, in parenthesis
-          'filterDataChanged(filterData.*)'
+          'filterDataChanged(filterData.*)',
+          'desktopDeviceChanged(desktopDevice)'
         ]
       }
 
       filterDataChanged(changes) {
-        // console.log('CarFilter.filterDataChanged()', changes);
-        // console.log('  notifying change at', changes.path, 'to', changes.value);
         this.updateResults();
+      }
+
+      desktopDeviceChanged(changes) {
+        this.set('mobileDevice', !this.desktopDevice);
+        console.log('desktopDevice is now', changes);
+        console.log('mobileDevice is now', this.mobileDevice);
       }
     }
 
     customElements.define(CarFilter.is, CarFilter);
+    
   </script>
 </dom-module>

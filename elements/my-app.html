@@ -1,10 +1,10 @@
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../promise-polyfill/promise-polyfill-lite.html">
 <link rel="import" href="../../iron-ajax/iron-ajax.html">
-<!-- bower install --save PolymerLabs/iron-ajax -->
-<!-- bower install --save PolymerLabs/promise-polyfill -->
+<link rel="import" href="../../iron-media-query/iron-media-query.html">
 <link rel="import" href="./filter/car-filter.html">
 <link rel="import" href="./results/car-list.html">
+<!-- <link rel="import" href="./collapse-header.html"> -->
 
 <dom-module id="my-app">
   <template>
@@ -20,10 +20,7 @@
           margin: 0 auto;
           padding-bottom: 4em;
           min-height: 100vh;
-          width: 95vw;
-          /* width: 100vw; */
-          /* overflow: scroll; */
-          overflow: visible;
+          width: 100vw;
           background-color: var(--app-secondary-background-color);
           font-family: 'Roboto', 'Noto', sans-serif;
         }
@@ -64,10 +61,19 @@
       debounce-duration="300"
     ></iron-ajax>
 
+    <iron-media-query
+      query="(min-width: 850px)"
+      query-matches="{{desktopDevice}}">
+    </iron-media-query>
+
+    <template is="dom-if" if={{desktopDevice}}>
+      <div style="width:900px;height:300px;background-color:black;"></div>
+    </template>
+
     <div class="header">Cars Co.</div>
     <div id="content" class="content">
       <template is="dom-if" if={{filterData}}>
-        <car-filter update-results={{updateResults}} filter-data={{filterData}}></car-filter>
+        <car-filter filter-data={{filterData}} desktop-device={{desktopDevice}}></car-filter>
         <car-list data={{results}}></car-list>
       </template>
     </div>
@@ -78,13 +84,16 @@
       static get is() { return "my-app"}
       static get properties() {
         return {
+          desktopDevice: {
+            type: Boolean,
+            observer: 'desktopDeviceChanged'
+          },
           acceptedFilterKeys: {
             type: Array,
             value: ['price', 'make', 'year']
           },
           filterData: {
-            type: Object,
-            observer: 'filterDataChanged'
+            type: Object
           },
           firstLoad: {
             type: Boolean,
@@ -101,39 +110,39 @@
         }
       }
 
+      static get observers() {
+        return [
+          'filterDataChanged(filterData.*)'
+        ]
+      }
+
       constructor() {
         super();
         this.updateResults = this.updateResults.bind(this);
         this.callUpdateResults = this.callUpdateResults.bind(this);
       }
+      
+      desktopDeviceChanged() {
+        console.log('MyApp.desktopDeviceChanged()');
+        console.log('  .desktopDevice', this.desktopDevice);
+      }
 
-      filterDataChanged(newValue, oldValue) {
-        console.log('MyApp.filterDataChanged()');
-        // console.log('  this.filterData', this.filterData);
-        console.log('  newValue', newValue);
-        console.log('  oldValue', oldValue);
+      filterDataChanged(changes) {
+        // console.log('MyApp.filterDataChanged()\n  changes:', changes);
+        const newUrl = this.getAllUrlParametersFromFilterData(this.filterData);
+        this.set('url', newUrl);
       }
 
       getSingleUrlParameterFromFilterData(data, key) {
-        // console.log('getSingleUrlParameterFromFilterData');
-        // console.log('  data:', data);
-        // console.log('  key:', key);
-        // console.log('  data[' + key + ']:', data[key]);
         const values = [];
-        // filterData[key].map(entry => entry.check ? values.push(entry[key]) : null);
         
         const dataValues = data[key];
-        // console.log('  dataValues:', dataValues);
-        // console.log('  dataValues[0]:', dataValues[0]);
         dataValues.map(entry => {
-          // console.log('  entry:', entry);
-          // console.log('  entry.check:', entry.check);
           return entry.check ? values.push(entry[key]) : null
         });
-        // console.log('getSingleUrlParameterFromFilterData\n  values:', values);
+
         if ( values.length > 0 ) {
           const valuesString = values.join(',');
-          // console.log('  valuesString:', valuesString);
           return valuesString;
         } else {
           return null;
@@ -141,18 +150,11 @@
       }
 
       getAllUrlParametersFromFilterData(data) {
-
-        // console.log('MyApp.getAllUrlParametersFromFilterData()\ndata:', data);
-        let url = '/api/cars';
-        const filterDataTrimmed = {};
-        filterDataTrimmed.make = this.getSingleUrlParameterFromFilterData(data, 'make');
-        filterDataTrimmed.year = this.getSingleUrlParameterFromFilterData(data, 'year');
-        filterDataTrimmed.price = data.price.price.toString();
-
-        // console.log('getAllUrlParametersFromFilterData.filterDataTrimmed()\nthis.filterData:', this.filterData);
-        // console.log('getAllUrlParametersFromFilterData.filterDataTrimmed()\nfilterDataTrimmed:', filterDataTrimmed);
-
-        // console.log('serializeQueryObject(filterDataTrimmed):', this.serializeQueryObject(filterDataTrimmed));
+        const filterDataTrimmed = {
+          make: this.getSingleUrlParameterFromFilterData(data, 'make'),
+          year: this.getSingleUrlParameterFromFilterData(data, 'year'),
+          price: data.price.price.toString()
+        };
         return '/api/cars?' + this.serializeQueryObject(filterDataTrimmed);
       }
 
@@ -173,23 +175,6 @@
         return encodeURI(parameterArray.join('&'));
       }
 
-      updateResults() {
-        setTimeout(this.callUpdateResults, 0);
-        // this.callUpdateResults()
-      }
-      callUpdateResults() {
-        // console.log('MyApp.updateResults() called');
-        // console.log('MyApp.updateResults():\nthis.filterData', this.filterData);
-        console.log('callUpdateResults() called');
-        const currentFilterData = Object.assign(this.filterData);
-        // console.log('MyApp.updateResults():\ncurrentFilterData', currentFilterData);
-        const urlParameters = this.getAllUrlParametersFromFilterData(currentFilterData);
-        const newUrl = 'http://localhost:3000' + urlParameters;
-        console.log('MyApp.callUpdateResults()\nnewUrl', newUrl);
-        this.set('url', newUrl);
-        // console.log('MyApp.updateResults():\nnewUrl', newUrl);
-      }
-
       getValuesPerKey(objectArray, key) {
         const allMakesNoRepeat = [];
         
@@ -199,7 +184,7 @@
         });
         
         // Eliminate duplicated values
-        allValues.map(value => {
+        allValues.forEach(value => {
           if (value !== null && allMakesNoRepeat.includes(value) === false ) {
             allMakesNoRepeat.push(value);
           }
@@ -216,19 +201,15 @@
       }
 
       getMakeFilterData(makeArray) {
-        return(
-          makeArray.map(make => {
-            return { make: make, check: false };
-          })
-        );
+        return makeArray.map(make => {
+          return { make: make, check: false };
+        });
       }
 
       getYearFilterData(yearArray) {
-        return(
-          yearArray.map(make => {
-            return { year: make, check: false };
-          })
-        );
+        return yearArray.map(make => {
+          return { year: make, check: false };
+        });
       }
 
       getAvailableFilterData(availableData) {
@@ -238,54 +219,28 @@
           availableFilterData[key] = values;
         });
 
-        const returnObject = {};
         const priceFilterData = availableFilterData.price ? this.getPriceFilterData(availableFilterData.price) : null;
-        // console.log('priceFilterData', priceFilterData);
-        const makeFilterData = availableFilterData.make ? this.getMakeFilterData(availableFilterData.make) : null;
-        // console.log('makeFilterData', makeFilterData);
-        const yearFilterData = availableFilterData.year ? this.getYearFilterData(availableFilterData.year) : null;
-        // console.log('yearFilterData', yearFilterData);
-        priceFilterData !== null ? returnObject.price = priceFilterData : null;
-        makeFilterData !== null ? returnObject.make = makeFilterData : null;
-        yearFilterData !== null ? returnObject.year = yearFilterData : null;
+        const makeFilterData  = availableFilterData.make  ? this.getMakeFilterData(availableFilterData.make)   : null;
+        const yearFilterData  = availableFilterData.year  ? this.getYearFilterData(availableFilterData.year)   : null;
         
-        // console.log('MyApp.getAvailableFilterData():\nreturnObject:', returnObject);
-
+        const returnObject = {};
+        priceFilterData !== null ? returnObject.price = priceFilterData : null;
+        makeFilterData  !== null ? returnObject.make  = makeFilterData  : null;
+        yearFilterData  !== null ? returnObject.year  = yearFilterData  : null;
+        
         return returnObject;
       }
 
-      // ready() {
-      //   super.ready();
-      //   console.log('MyApp.ready()');
-      // }
-
       _carsLoaded(e) {
-        console.log('MyApp._carsLoaded()')
         const data = e.detail.response;
-        // console.log('MyApp._carsLoaded()\nreceived data:', data);
-        // console.log('MyApp.filterData:', this.filterData);
         if (this.firstLoad) {
           this.set('filterData', this.getAvailableFilterData(data));
-          console.log('MyApp._carsLoaded() > filterData updated');
           this.set('results', data);
-          console.log('MyApp._carsLoaded() > results updated');
           this.set('firstLoad', false);
-          console.log('MyApp._carsLoaded() > firstLoad updated');
         } else {
           this.set('results', data);
-          console.log('MyApp._carsLoaded() > results updated');
-          // console.log('this.results:', this.results);
         }
-        // console.log('MyApp.filterData:', this.filterData);
-        // console.log('MyApp.filterData updated');
       }
-
-      /*  1. On load, fetch all cars
-          2. Get all available makes, prices and years for the filter data
-          3. Call API with desired data:
-            3.1. write function to: filterData => urlParameters
-            - If all make or year are false, show all (only apply price filter)
-      */
     }
     
     customElements.define(MyApp.is, MyApp);
